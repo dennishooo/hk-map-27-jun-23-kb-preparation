@@ -1,12 +1,17 @@
 const prompts = require("prompts");
 async function main() {
-  let finalAns = "3";
+  // generate a random number
+  let finalAns = generateRandomNumber();
   let players = [];
+
   await getPlayers(players);
-  for (let i = 0; i < players.length; i++) {
-    await getPlayerAnswer(players[i], finalAns);
-  }
+
+  await getPlayerAnswer(players, finalAns);
   console.log(players);
+}
+
+function generateRandomNumber() {
+  return Math.floor(Math.random() * 6) + 1;
 }
 
 async function getPlayers(players) {
@@ -24,17 +29,29 @@ async function getPlayers(players) {
   }
 }
 
-async function getPlayerAnswer(player, finalAns) {
-  const ans = await prompts({
-    type: "text",
-    name: "number",
-    message: `${player.name}'s guess the number (1-6):`,
-  });
-  player.guess = ans.number;
-  console.log(finalAns);
+async function getPlayerAnswer(players, finalAns) {
+  while (true) {
+    for (let player of players) {
+      const ans = await prompts({
+        type: "text",
+        name: "number",
+        message: `${player.name}'s guess the number (1-6):`,
+      });
 
-  if (ans.number === finalAns) player.score += 1;
-  //   players.find((parti) => player.id === parti.id).guess = ans.number;
+      // quit the loop when player input nothing
+      if (ans.number === "") return;
+      player.guess = parseInt(ans.number);
+
+      if (player.guess === finalAns) {
+        console.log(`${player.name} WON! new turn start`);
+        // add score for the player
+        player.score += 1;
+        // reassign a new ans if someone get the correct answer
+
+        finalAns = generateRandomNumber();
+      }
+    }
+  }
 }
 
 main();
