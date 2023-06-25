@@ -9,10 +9,10 @@ function quickPicks(ans, guessTimes) {
   let result = [];
   for (let i = 0; i < guessTimes; i++) {
     let bid = [];
+    let guesses = new Set();
     while (bid.length < 2) {
-      let guesses = new Set();
       let guess = Math.floor(Math.random() * 10);
-      console.log({ guess, guesses });
+      // console.log({ guess, guesses });
       if (guesses.has(guess)) continue;
       guesses.add(guess);
       bid.push(guess);
@@ -25,7 +25,7 @@ function quickPicks(ans, guessTimes) {
 // console.log(checkMarkSix([1, 2, 3], [1, 2]));
 // console.log(checkMarkSix([1, 2, 3], [6, 2]));
 
-quickPicks([1, 2, 3], 10).forEach((pick, idx) => {
+quickPicks([1, 2, 3], 100).forEach((pick, idx) => {
   setTimeout(() => {
     console.log(`Your quick pick ${pick.bid}`);
     console.log(pick.win.toString().toUpperCase());
